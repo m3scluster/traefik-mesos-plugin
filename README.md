@@ -77,6 +77,46 @@ Supported fields are `endpoint` (default `127.0.0.1:5050`), `ssl` (default `fals
 
 The placeholders `__mesos_taskid__` and `__mesos_portname__` are replaced in label keys and values. HTTP, TCP, and UDP backend addresses are built from Mesos task network status and discovery ports.
 
+## Label examples
+
+The following labels can be placed on a ClusterD/Apache Mesos task. The provider reads the labels, finds the matching Mesos discovery port, and publishes the resulting configuration to Traefik.
+
+### HTTP
+
+```text
+traefik.enable = true
+traefik.http.routers.__mesos_taskid__.rule = Host(`app.example.com`)
+traefik.http.routers.__mesos_taskid__.entrypoints = web
+traefik.http.routers.__mesos_taskid__.service = __mesos_portname__
+```
+
+For a task with a discovery port named `web`, the provider creates a service for that port. An explicit backend port can also be supplied:
+
+```text
+traefik.http.routers.__mesos_taskid__.rule = Host(`app.example.com`)
+traefik.http.routers.__mesos_taskid__.service = app
+traefik.http.services.app.loadbalancer.server.port = 8080
+```
+
+### TCP
+
+```text
+traefik.tcp.routers.__mesos_taskid__.rule = HostSNI(`*`)
+traefik.tcp.routers.__mesos_taskid__.entrypoints = tcp
+traefik.tcp.routers.__mesos_taskid__.service = database
+traefik.tcp.services.database.loadbalancer.server.port = 5432
+```
+
+### UDP
+
+```text
+traefik.udp.routers.__mesos_taskid__.entrypoints = dns
+traefik.udp.routers.__mesos_taskid__.service = dns
+traefik.udp.services.dns.loadbalancer.server.port = 5353
+```
+
+The task ID placeholder is replaced in both label keys and values, with dots changed to underscores. The port-name placeholder uses the first Mesos discovery port name. If no explicit `loadbalancer.server.port` label is present, the provider uses the matching discovery port number.
+
 ## Development
 
 Dependencies are vendored because Traefik plugins load vendored source. Run:
