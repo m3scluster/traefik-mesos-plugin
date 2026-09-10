@@ -1,0 +1,10 @@
+displayName: ClusterD/Apache Mesos Provider
+type: provider
+iconPath: assets/clusterd-mark.png
+bannerPath: assets/clusterd-traefik-banner.png
+import: github.com/m3scluster/traefik-mesos-plugin
+summary: 'ClusterD/Apache Mesos provider for Traefik with dynamic service discovery. Learn more at https://www.clusterd.de/.'
+testData:
+  endpoint: http://127.0.0.1:5050
+  pollInterval: 1s
+  pollTimeout: 1s
