@@ -87,6 +87,8 @@ traefik.enable = true
 traefik.http.routers.__mesos_taskid__.rule = Host(`app.example.com`)
 traefik.http.routers.__mesos_taskid__.entrypoints = web
 traefik.http.routers.__mesos_taskid__.service = __mesos_portname__
+traefik.http.routers.__mesos_taskid__.tls = true
+traefik.http.routers.__mesos_taskid__.tls.certresolver = letsencrypt
 ```
 
 For a task with a discovery port named `web`, the provider creates a service for that port. An explicit backend port can also be supplied:

@@ -390,7 +390,19 @@ func (p *Provider) httpLabel(c *dynamic.HTTPConfiguration, t task, object, n, f,
 	case "priority":
 		r.Priority, _ = strconv.Atoi(v)
 	case "tls":
-		r.TLS = &dynamic.RouterTLSConfig{}
+		if strings.EqualFold(v, "true") {
+			r.TLS = &dynamic.RouterTLSConfig{}
+		}
+	case "tls.certresolver":
+		if r.TLS == nil {
+			r.TLS = &dynamic.RouterTLSConfig{}
+		}
+		r.TLS.CertResolver = v
+	case "tls.options":
+		if r.TLS == nil {
+			r.TLS = &dynamic.RouterTLSConfig{}
+		}
+		r.TLS.Options = v
 	}
 	if r.Rule == "" {
 		r.Rule = p.defaultRuleFor(t)
@@ -422,7 +434,19 @@ func (p *Provider) tcpLabel(c *dynamic.TCPConfiguration, t task, object, n, f, v
 	case "entrypoints":
 		r.EntryPoints = csv(v)
 	case "tls":
-		r.TLS = &dynamic.RouterTCPTLSConfig{}
+		if strings.EqualFold(v, "true") {
+			r.TLS = &dynamic.RouterTCPTLSConfig{}
+		}
+	case "tls.certresolver":
+		if r.TLS == nil {
+			r.TLS = &dynamic.RouterTCPTLSConfig{}
+		}
+		r.TLS.CertResolver = v
+	case "tls.options":
+		if r.TLS == nil {
+			r.TLS = &dynamic.RouterTCPTLSConfig{}
+		}
+		r.TLS.Options = v
 	}
 	if c.Services[r.Service] == nil {
 		c.Services[r.Service] = &dynamic.TCPService{LoadBalancer: &dynamic.TCPServersLoadBalancer{}}

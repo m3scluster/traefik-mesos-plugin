@@ -91,3 +91,31 @@ func TestStopIsIdempotent(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestConfigurationPreservesTLSCertificateResolver(t *testing.T) {
+	p := &Provider{defaultRule: defaultRule}
+	taskData := task{
+		ID:    "task.1",
+		Name:  "secure app",
+		State: "TASK_RUNNING",
+		Labels: []label{
+			{Key: "traefik.http.routers.app.rule", Value: "Host(`app.example.com`)"},
+			{Key: "traefik.http.routers.app.entrypoints", Value: "websecure"},
+			{Key: "traefik.http.routers.app.service", Value: "app"},
+			{Key: "traefik.http.routers.app.tls", Value: "true"},
+			{Key: "traefik.http.routers.app.tls.certresolver", Value: "letsencrypt"},
+		},
+	}
+
+	conf, err := p.configuration([]task{taskData})
+	if err != nil {
+		t.Fatal(err)
+	}
+	router := conf.HTTP.Routers["app"]
+	if router == nil || router.TLS == nil {
+		t.Fatalf("expected TLS router, got %#v", router)
+	}
+	if router.TLS.CertResolver != "letsencrypt" {
+		t.Fatalf("expected certResolver letsencrypt, got %q", router.TLS.CertResolver)
+	}
+}
