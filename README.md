@@ -2,7 +2,6 @@
 
 This repository contains a standalone [Traefik provider plugin](https://doc.traefik.io/traefik/extend/plugins/plugin-providers/) that discovers running ClusterD/Apache Mesos tasks and converts their `traefik.*` labels into HTTP, TCP, and UDP configuration.
 
-The plugin uses the [ClusterD](https://www.clusterd.de/) logo as its catalog icon (`assets/clusterd-mark.png`) and combines ClusterD/Apache Mesos with Traefik in its catalog banner (`assets/clusterd-traefik-banner.png`).
 
 ## Configuration
 
