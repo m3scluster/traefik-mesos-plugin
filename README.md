@@ -12,7 +12,7 @@ experimental:
   plugins:
     mesos:
       moduleName: github.com/m3scluster/traefik-mesos-plugin
-      version: v0.1.0
+      version: v0.1.1
 
 providers:
   plugin:
@@ -27,12 +27,12 @@ providers:
       defaultRule: Host(`{{ normalize .Name }}`)
 ```
 
-Dieselbe Konfiguration als TOML:
+The same configuration as TOML:
 
 ```toml
 [experimental.plugins.mesos]
   moduleName = "github.com/m3scluster/traefik-mesos-plugin"
-  version = "v0.1.0"
+  version = "v0.1.1"
 
 [providers.plugin.mesos]
   endpoint = "mesos-master.example.invalid:5050"
@@ -59,7 +59,7 @@ providers:
       pollInterval: 2s
 ```
 
-Der Local-Plugin-Modus als TOML:
+The Local-Plugin-Modus as TOML:
 
 ```toml
 [experimental.localPlugins.mesos]
